@@ -1,0 +1,55 @@
+#!/usr/bin/env python3
+import subprocess
+import sys
+
+def banner():
+    print(r"""
+=========================================
+       ASTRO9INE YT ⏬️⬇️
+ YouTube Downloader (Termux)
+ Supports: 240p → 4K
+=========================================
+""")
+
+def download(url, quality):
+    formats = {
+        "240": "bestvideo[height<=240]+bestaudio/best[height<=240]",
+        "360": "bestvideo[height<=360]+bestaudio/best[height<=360]",
+        "480": "bestvideo[height<=480]+bestaudio/best[height<=480]",
+        "720": "bestvideo[height<=720]+bestaudio/best[height<=720]",
+        "1080": "bestvideo[height<=1080]+bestaudio/best[height<=1080]",
+        "1440": "bestvideo[height<=1440]+bestaudio/best[height<=1440]",
+        "2160": "bestvideo[height<=2160]+bestaudio/best[height<=2160]"
+    }
+
+    if quality not in formats:
+        print("Invalid quality. Defaulting to 720p.")
+        quality = "720"
+
+    subprocess.run([
+        "yt-dlp",
+        "-f", formats[quality],
+        "--merge-output-format", "mp4",
+        url
+    ])
+
+def main():
+    banner()
+    url = input("Video URL: ").strip()
+
+    print("""
+Choose video quality:
+240  = 240p
+360  = 360p
+480  = 480p
+720  = 720p (HD)
+1080 = 1080p (FHD)
+1440 = 2K
+2160 = 4K
+""")
+    quality = input("Enter resolution number: ").strip()
+    download(url, quality)
+    print("Download finished!")
+
+if __name__ == "__main__":
+    main()
